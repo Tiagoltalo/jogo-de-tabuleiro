@@ -66,6 +66,10 @@ public class MenuController {
 
                     // Verifica se o jogador irá jogar mais uma vez nessa rodada
                     if(jogadorController.jogada(jogador)) {
+                        utils.limparTerminal();
+                        utils.mostrarMensagem("O jogador " + jogador.getNome() + " tirou dados iguais.\nPode jogar os dados novamente.");
+                        utils.pausar();
+
                         jogadorController.jogada(jogador);
                     }
     
@@ -76,6 +80,10 @@ public class MenuController {
                     }
 
                     if (jogador.getNumeroAtualDaCasa() == 10 || jogador.getNumeroAtualDaCasa() == 25 || jogador.getNumeroAtualDaCasa() == 38) {
+                        utils.limparTerminal();
+                        utils.mostrarMensagem("O jogador " + jogador.getNome() + " caiu na Casa do Azar.\nNão jogará a próxima rodada.");
+                        utils.pausar();
+
                         naoJogamNaRodada.add(jogador);
                     }
 

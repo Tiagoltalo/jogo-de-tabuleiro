@@ -20,7 +20,7 @@ public class Casa {
         }
     }
 
-    public void funcaoEspecial (List<Jogador> jogador, int indice) {}
+    public String funcaoEspecial (List<Jogador> jogador, int indice) { return null; }
 
     public int getNumeroDaCasa () {
         return this.numeroDaCasa;

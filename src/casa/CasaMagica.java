@@ -4,6 +4,8 @@ import java.util.List;
 import src.jogador.Jogador;
 
 public class CasaMagica extends Casa {
+    private String nome = "Casa Mágica";
+
     public CasaMagica (int numeroDaCasa) {
         super(numeroDaCasa);
     }
@@ -12,7 +14,7 @@ public class CasaMagica extends Casa {
         return super.jogadorNaCasa(estaJogador);
     }
 
-    public void funcaoEspecial (List<Jogador> jogadores, int indice) {
+    public String funcaoEspecial (List<Jogador> jogadores, int indice) {
         Jogador jogador1 = jogadores.get(indice);
         Jogador jogador2 = jogadores.get(indice);
         int diferenca;
@@ -27,5 +29,7 @@ public class CasaMagica extends Casa {
 
         jogador1.voltarCasas(diferenca);
         jogador2.pularCasas(diferenca);
+
+        return "O jogador " + jogador1.getNome() + " caiu na " + this.nome + ".\nVocê irá trocar de lugar com o jogador " + jogador2.getNome();
     }
 }

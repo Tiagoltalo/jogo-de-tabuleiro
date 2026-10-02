@@ -2,9 +2,11 @@ package src.casa;
 
 import java.util.List;
 import java.util.ArrayList;
+import src.utils.Utils;
 import src.jogador.Jogador;
 
 public class CasaController {
+    private Utils utils = new Utils();
     private List<Casa> casas = new ArrayList<>();
     private int QUANTIDADE_DE_CASAS = 40;
 
@@ -34,11 +36,17 @@ public class CasaController {
     }
 
     public void acaoDasCasas (List<Casa> casas, List<Jogador> jogadores, Jogador jogador) {
+        String mensagem;
+
         for (Casa casa : casas ) {
             if (jogador.getNumeroAtualDaCasa() == casa.getNumeroDaCasa()) {
-                casa.funcaoEspecial(jogadores, jogadores.indexOf(jogador));
+                mensagem = casa.funcaoEspecial(jogadores, jogadores.indexOf(jogador));
 
-                utils.mostrarMensagem("Você caiu na casa ")
+                if (mensagem != null) {
+                    utils.limparTerminal();
+                    utils.mostrarMensagem(mensagem);
+                    utils.pausar();
+                }
             }
         }
     }
