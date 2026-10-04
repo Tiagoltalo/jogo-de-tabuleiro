@@ -8,6 +8,7 @@ import src.casa.CasaController;
 import src.casa.Casa;
 import src.jogador.JogadorController;
 import src.jogador.Jogador;
+import src.exceptions.EntradaInvalidaException;
 
 public class MenuController {
     private Utils utils = new Utils();
@@ -30,7 +31,13 @@ public class MenuController {
         return menuView.lerOpcao();
     }
 
-    public void iniciarJogo () {
+    public int menuDeModoDeJogo () {
+        utils.limparTerminal();
+        menuView.imprimirMenuModoDeJogo();
+        return menuView.lerOpcao();
+    }
+
+    public void iniciarJogo (int modoDeJogo) {
         List<Jogador> naoJogamNaRodada = new ArrayList<>(); // Armazena os jogadores que não jogam na rodada
         Jogador jogadorVencedor = new Jogador(null, null, null); // Armazena a instância do jogador que venceu
         boolean jogadoresDeTipoDiferente = false;
@@ -64,20 +71,14 @@ public class MenuController {
                         continue;
                     }
 
-                    // Verifica se o jogador irá jogar mais uma vez nessa rodada
-                    if(jogadorController.jogada(jogador)) {
-                        utils.limparTerminal();
-                        utils.mostrarMensagem("O jogador " + jogador.getNome() + " tirou dados iguais.\nPode jogar os dados novamente.");
-                        utils.pausar();
-
-                        jogadorController.jogada(jogador);
-                    }
-    
+                    estruturaDeJogada(jogador, modoDeJogo);
+                    
                     if (jogador.getNumeroAtualDaCasa() >= 40) {
                         jogadorVencedor = jogador;
                         looping = false;
                         break;
                     }
+                    
 
                     if (jogador.getNumeroAtualDaCasa() == 10 || jogador.getNumeroAtualDaCasa() == 25 || jogador.getNumeroAtualDaCasa() == 38) {
                         utils.limparTerminal();
@@ -110,7 +111,7 @@ public class MenuController {
         utils.pausar();
     }
 
-    public void criarJogador () {
+    public void criarJogador () throws EntradaInvalidaException{
         utils.limparTerminal();
         jogadores.add(jogadorController.criarJogador());
         mensagem = "\nJogador criado com sucesso!!!";
@@ -123,5 +124,45 @@ public class MenuController {
         mensagem = "\nObrigado por jogar!!!";
         utils.mostrarMensagem(mensagem);
         utils.pausar();
+    }
+
+    private void estruturaDeJogada (Jogador jogador, int modoDeJogo) {
+        boolean looping = true;
+        int valorDaCasa;
+        int diferenca;
+
+        if (modoDeJogo == 1) {
+            // Verifica se o jogador irá jogar mais uma vez nessa rodada
+            if(jogadorController.jogada(jogador)) {
+                utils.limparTerminal();
+                utils.mostrarMensagem("O jogador " + jogador.getNome() + " tirou dados iguais.\nPode jogar os dados novamente.");
+                utils.pausar();
+
+                jogadorController.jogada(jogador);
+            }
+
+        } else if (modoDeJogo == 2) {
+            // Modo Debug: permite que o jogador escolha a casa que deseja ir
+            while (looping) {
+                utils.limparTerminal();
+                utils.mostrarMensagem("Jogador: " + jogador.getNome() + " - Casa: " + jogador.getNumeroAtualDaCasa());
+                valorDaCasa = menuView.lerValorDaCasa();
+
+                if (valorDaCasa >= 1 && valorDaCasa <= 40) { looping = false; }
+
+                if (jogador.getNumeroAtualDaCasa() < valorDaCasa) {
+                    diferenca = valorDaCasa - jogador.getNumeroAtualDaCasa();
+
+                    jogador.pularCasas(diferenca);
+                } else {
+                    diferenca = jogador.getNumeroAtualDaCasa() - valorDaCasa;
+
+                    jogador.voltarCasas(diferenca);
+                }
+
+                utils.mostrarMensagem("\nO jogador " + jogador.getNome() + " foi para a casa " + jogador.getNumeroAtualDaCasa());
+                utils.pausar();
+            }
+        }
     }
 }

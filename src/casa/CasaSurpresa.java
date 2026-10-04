@@ -13,8 +13,8 @@ public class CasaSurpresa extends Casa {
         super(numeroDaCasa);
     }
 
-    public String jogadorNaCasa (boolean estaJogador) {
-        return super.jogadorNaCasa(estaJogador);
+    public String jogadorNaCasa (boolean estaJogador, int quantidadeDeJogadores) {
+        return super.jogadorNaCasa(estaJogador, quantidadeDeJogadores);
     }
 
     public String funcaoEspecial (List<Jogador> jogadores, int indice) {

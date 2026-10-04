@@ -1,10 +1,12 @@
 package src.tabuleiro;
 
 import java.util.List;
+import src.utils.Utils;
 import src.casa.Casa;
 import src.jogador.Jogador;
 
 public class Tabuleiro {
+    private Utils utils = new Utils();
     private final int LINHAS = 4;
     private final int COLUNAS = 10;
 
@@ -30,7 +32,10 @@ public class Tabuleiro {
 
     private void montarLinha (List<Jogador> jogadores, List<Casa> casas, int linha) {
         Casa casa = new Casa(0);
+        String marcacaoDaCasa = "";
+        String cor = "";
         boolean jogadorNaCasa = false;
+        int quantidadeDeJogadores = 0;
 
         for (int coluna = 0; coluna < COLUNAS; coluna++) {
             casa = casas.get(calcularNumeroDaCasa(linha, coluna));
@@ -38,11 +43,22 @@ public class Tabuleiro {
             for (Jogador jogador : jogadores) {
                 if (jogador.getNumeroAtualDaCasa() == casa.getNumeroDaCasa()) {
                     jogadorNaCasa = true;
+                    quantidadeDeJogadores++;
+
+                    if (quantidadeDeJogadores == 1) {
+                        cor = jogador.getCor();
+                    } else {
+                        cor = "";
+                    }
                 }
             }
 
-            System.out.printf("| %2s ", casa.jogadorNaCasa(jogadorNaCasa));
+            marcacaoDaCasa = utils.aplicarCor(casa.jogadorNaCasa(jogadorNaCasa, quantidadeDeJogadores), cor);
 
+            System.out.printf("| %2s ", marcacaoDaCasa);
+
+            cor = "";
+            quantidadeDeJogadores = 0;
             jogadorNaCasa = false;
         }
 

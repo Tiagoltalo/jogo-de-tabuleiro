@@ -10,8 +10,14 @@ public class Casa {
         this.numeroDaCasa = numeroDaCasa;
     }
 
-    public String jogadorNaCasa (boolean estaJogador) {
-        String peca = "I";
+    public String jogadorNaCasa (boolean estaJogador, int quantidadeDeJogadores) {
+        String peca;
+
+        switch (quantidadeDeJogadores) {
+            case 1: peca = "★"; break;            
+            default:
+                peca = "★★";
+        }
 
         if (estaJogador) {
             return peca;

@@ -1,8 +1,9 @@
 package src.jogador;
 
 import java.util.List;
-
 import src.utils.Utils;
+import src.exceptions.EntradaInvalidaException;
+import src.exceptions.LeituraValidada;
 
 public class JogadorController {
     private Utils utils = new Utils();
@@ -11,22 +12,31 @@ public class JogadorController {
 
     public JogadorController () {}
 
-    public Jogador criarJogador () {
+    private <T> T lerAteSerValidado (LeituraValidada<T> leitura) {
+        while (true) {
+            try {
+                return leitura.ler();
+            } catch (EntradaInvalidaException e) {
+                utils.mostrarMensagem("\n" + e.getMessage() + ".\n");
+            }
+        }
+    }
+
+    public Jogador criarJogador () throws EntradaInvalidaException {
         String nome;
         String cor;
         String tipo;
 
         utils.limparTerminal();
-        nome = jogadorView.lerNome();
-        cor = jogadorView.lerCor();
-        tipo = jogadorView.lerTipo();
+        
+        nome = lerAteSerValidado(jogadorView::lerNome);
+        cor = lerAteSerValidado(jogadorView::lerCor);
+        tipo = lerAteSerValidado(jogadorView::lerTipo);
 
-        if (tipo.equals("jogadornormal")) {
-            jogador = new Jogador(nome, cor, tipo);
-        } else if (tipo.equals("jogadorsortudo")) {
-            jogador = new JogadorSortudo(nome, cor);
-        } else if (tipo.equals("jogadorazarado")) {
-            jogador = new JogadorAzarado(nome, cor);
+        switch (tipo) {
+            case "jogadornormal": return new Jogador(nome, cor, tipo);
+            case "jogadorsortudo": return new Jogador(nome, cor, tipo);
+            case "jogadorazarado": return new Jogador(nome, cor, tipo);
         }
 
         return jogador;

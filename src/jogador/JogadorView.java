@@ -2,63 +2,76 @@ package src.jogador;
 
 import java.util.Scanner;
 import java.util.List;
+import src.exceptions.EntradaInvalidaException;
 
 public class JogadorView {
     Scanner scanner = new Scanner(System.in);
-    private String texto;
-    private int numero;
 
     public JogadorView () {}
 
-    public String lerNome () {
+    public String lerNome () throws EntradaInvalidaException {
         System.out.print("Digite o nome do jogador: ");
-        texto = scanner.next();
+        String texto = scanner.nextLine().trim();
         
-        try {
-            return texto.toLowerCase();
-        } catch (Exception e) {
-            System.out.print("\nPor favor, digite um valor válido.");
+        if (texto.isEmpty()) {
+            throw new EntradaInvalidaException("nome", texto, "o campo não pode ficar vazio");
         }
 
-        return null;
+        return texto.toLowerCase();
     }
 
-    public String lerCor () {
-        System.out.print("Digite a cor do jogador: ");
-        texto = scanner.next();
+    public String lerCor () throws EntradaInvalidaException {
+        System.out.print("\n[ 1 ] verde\n");
+        System.out.print("[ 2 ] azul\n");
+        System.out.print("[ 3 ] vermelho\n");
+        System.out.print("[ 4 ] roxo\n");
+        System.out.print("[ 5 ] amarelo\n");
+        System.out.print("[ 6 ] branco\n");
+        System.out.print("\nDigite a cor do jogador: ");
+        String texto = scanner.nextLine().trim();
+        int opcao;
 
         try {
-            return texto.toLowerCase();
-        } catch (Exception e) {
-            System.out.print("\nPor favor, digite um valor válido.");
+            opcao = Integer.parseInt(texto);
+        } catch (NumberFormatException e) {
+            throw new EntradaInvalidaException("tipo", texto, "digite apenas o número da opção", e);
         }
 
-        return null;
+        switch (opcao) {
+            case 1: return "verde";
+            case 2: return "azul";
+            case 3: return "vermelho";
+            case 4: return "roxo";
+            case 5: return "amarelo";
+            case 6: return "branco";
+
+            default:
+                throw new EntradaInvalidaException("cor", texto, "só é possível selecionar opcões de 1-6");
+        }
     }
 
-    public String lerTipo () {
+    public String lerTipo () throws EntradaInvalidaException {
         System.out.print("\n[ 1 ] Jogador Normal\n");
         System.out.print("[ 2 ] Jogador Sortudo\n");
         System.out.print("[ 3 ] Jogador Azarado\n");
         System.out.print("\nEscolha o tipo do seu jogador: ");
+        String texto = scanner.nextLine().trim();
+        int opcao;
         
         try {
-            numero = scanner.nextInt();
-
-            if (numero == 1) {
-                texto = "jogadornormal";
-            } else if (numero == 2) {
-                texto = "jogadorsortudo";
-            } else if (numero == 3) {
-                texto = "jogadorazarado";
-            }
-
-            return texto;
-        } catch (Exception e) {
-            System.out.print("\nPor favor, digite um valor válido.");
+            opcao = Integer.parseInt(texto);
+        } catch (NumberFormatException e) {
+            throw new EntradaInvalidaException("tipo", texto, "digite apenas o número da opção", e);
         }
 
-        return null;
+        switch (opcao) {
+            case 1: return "jogadornormal";
+            case 2: return "jogadorsortudo";
+            case 3: return "jogadorazarado";
+            
+            default:
+                throw new EntradaInvalidaException("tipo", texto, "só é possível escolher entre 1-3");
+        }
     }
 
     public void imprimirJogadores (List<Jogador> jogadores) {
